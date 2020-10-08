@@ -79,7 +79,7 @@ res_dat <- res %>%
          Sidewalk.Dimensions..Length.,Sidewalk.Dimensions..Width.,Sidewalk.Dimensions..Area.,
          Roadway.Dimensions..Length.,Roadway.Dimensions..Width.,Roadway.Dimensions..Area.,
          Approved.for.Sidewalk.Seating,Approved.for.Roadway.Seating) %>%
-  filter(!is.na(Latitude) | !is.na(Longitude)) %>%
+  #filter(!is.na(Latitude) | !is.na(Longitude)) %>%
   rename(longitude=Longitude, latitude=Latitude, name=Restaurant.Name,
          address=Business.Address, alcohol=Qualify.Alcohol, postcode=Postcode,
          time_submit=Time.of.Submission,sw_len=Sidewalk.Dimensions..Length.,sw_width=Sidewalk.Dimensions..Width.,
