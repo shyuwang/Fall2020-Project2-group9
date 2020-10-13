@@ -59,7 +59,7 @@ zip <- c(bronx,brooklyn,manhattan,queens,si)
 zip_boro <- data.frame(Borough=boro, Zipcode=zip)
 
 # read Open_Restaurant_Applications.csv from data folder
-res <- read.csv("../data/Open_Restaurant_Applications.csv",header=TRUE,sep=';')
+res <- read.csv("../data/Open_Restaurant_Applications.csv",header=TRUE)
 
 # the borough in original data has something wrong, fix it using correct zip-borough mapping
 res_dat <- res %>%
