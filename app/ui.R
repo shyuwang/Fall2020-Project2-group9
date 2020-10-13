@@ -113,6 +113,8 @@ ui <- dashboardPage(skin="blue",
                                 fluidPage(
                                   
                                   ####plot
+                                  leafletOutput("res_amount"),
+                                  
                                   
                                   fluidRow(
                                     column(12,
@@ -127,7 +129,9 @@ ui <- dashboardPage(skin="blue",
                                   #####or plot here
                                   leafletOutput("case_pct_chg")
                                   
+                                  
                                   )),
+                            
                         
                         #Analysis2
                         tabItem(tabName = "Analysis2",
@@ -142,7 +146,7 @@ ui <- dashboardPage(skin="blue",
                                              tags$li(h4("...")),
                                              tags$li(h4("..."))
                                            ))
-                                    ))
+                                    )),
                                   
                                   
                                   #####or plot here

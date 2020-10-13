@@ -20,6 +20,7 @@ shinyServer(function(input,output, session){
   recent_4_week <- read.csv(text=url2)
   zipcodes <- geojsonio::geojson_read("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/Geography-resources/MODZCTA_2010_WGS1984.geo.json", what = 'sp')
   
+  load(file="./output/res_amounts.RData")
   
   output$time<-renderText({"time"}) #paste("Date Updated:",num[16])
   
@@ -91,7 +92,47 @@ shinyServer(function(input,output, session){
 
   })
   
-  
+  # Natalie - Amount of Restaurants in an Area 
+  output$res_amount <- renderLeaflet({
+    # Color palette
+    pal <- colorNumeric(
+      palette = "YlGnBu",
+      domain = amount_tbl$amount
+    )
+    # Make labels for zipcodes 
+    labels <- paste0(
+      "Zip Code: ", 
+      recent_4_week$NEIGHBORHOOD_NAME, "<br/>",
+      "Amount of Restaurants in this Neighborhood: ",
+      amount_tbl$amount 
+      )%>%
+      lapply(htmltools::HTML)
+    
+    map <-zipcodes%>%
+      leaflet()%>%
+      setView(lng=-74.0060, lat=40.7128, zoom = 10)%>%
+      addTiles()%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(
+        fillColor = ~pal(amount_tbl$amount),
+        weight =2,
+        opacity = 1, 
+        color = 'white',
+        fillOpacity = 0.7,
+        highlight = highlightOptions(
+          weight = 5,
+          color = "#666",
+          
+          fillOpacity = 0.7,
+          bringToFront = TRUE),
+        label= labels)%>%
+      addLegend(pal=pal,
+                values = ~amount_tbl$amount,
+                opacity =0.7, 
+                title=htmltools::HTML("Amount of Reopened<br>
+                                      Rest. in Neighborhood"),
+                position ='topleft')
+  })
 
   
 })
