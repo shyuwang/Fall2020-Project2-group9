@@ -1,5 +1,6 @@
 
 #UI
+require(leaflet)
 
 #start ui
 ui <- dashboardPage(skin="blue",
@@ -120,12 +121,11 @@ ui <- dashboardPage(skin="blue",
                                              tags$li(h4("...")),
                                              tags$li(h4("..."))
                                                   ))
-                                           ))
+                                           )),
                                   
                                   
                                   #####or plot here
-                                  
-                                  
+                                  leafletOutput("case_pct_chg")
                                   
                                   )),
                         
