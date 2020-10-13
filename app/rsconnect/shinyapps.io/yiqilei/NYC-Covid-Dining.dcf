@@ -1,0 +1,12 @@
+name: NYC-Covid-Dining
+title: NYC-Covid-Dining
+username:
+account: yiqilei
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2999623
+bundleId: 3735848
+url: https://yiqilei.shinyapps.io/NYC-COVID-DINING/
+when: 1602611280.95406
+asMultiple: FALSE
+asStatic: FALSE

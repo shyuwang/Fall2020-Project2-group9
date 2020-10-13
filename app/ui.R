@@ -228,17 +228,57 @@ ui <- dashboardPage(skin="blue",
                         #Suggestions
                         tabItem(tabName = "Suggestions",
                                 fluidPage(
-                                  column(12,
-                                         h4("There are some limitations of this project"),
-                                         p(""),
-                                         h4("We  will give some suggestions based on our analyses. Beside, more health suggestions could be found on CDC website. URL"),
-                                         tags$div(tags$ul(
-                                           tags$li("When you want to dine out, please take the neighborhood’s recent new case rate and positivity rate into consideration."),
-                                           tags$li("Avoid dining at restaurants where seating capacity is not reduced and tables are not spaced at least 6 feet apart."),
-                                           tags$li("Do not dine out, separate yourself from other people and monitor your symptoms  if you are feeling sick."),
-                                           tags$li("Before eating food, it is important to always wash your hands with hand sanitizer that contains at least 60% alcohol.")
-                                         ))
-                                  ))
+                                  
+                                  fluidRow(
+                                    width = 12,
+                                    h2("Dining Suggestions",align = "center"),
+                                    tags$div(tags$ul(
+                                      tags$li("When you want to dine out, please take the neighborhood’s recent new case rate and positivity rate into consideration."),
+                                      tags$li("Avoid dining at restaurants where seating capacity is not reduced and tables are not spaced at least 6 feet apart."),
+                                      tags$li("Do not dine out, separate yourself from other people and monitor your symptoms  if you are feeling sick."),
+                                      tags$li("Before eating food, it is important to always wash your hands with hand sanitizer that contains at least 60% alcohol.")
+                                    )),
+                                    br(),br()
+                                  ),
+                                  
+                                  
+                                  fluidRow(
+                                    width = 12,
+                                    h2("Health Suggestions",align = "center"),
+                                    
+                                    tags$div(tags$ul(
+                                      tags$li("Suggestion1"),
+                                      tags$li("Suggestion2")
+                                    )),
+                                    
+                                    p("You can check out the CDC and WHO Websites for information about the COVID-19, 
+                                      related health suggestions, guidance and more."),
+                                    p(a("CDC Covid-19 Page",href="https://www.cdc.gov/coronavirus/2019-ncov/index.html")),
+                                    p(a("WHO Advice",href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/advice-for-public")),
+                                    p(a("Columbia Health guide",href="https://health.columbia.edu/news/your-guide-columbia-health-fall-2020")),
+                                    br(),br()
+                                    ),
+                                  
+                                  
+                                  fluidRow(
+                                    width = 12,
+                                    h2("Limitations",align = "center"),
+                                    p("There are some limitations of our project."),
+                                    tags$div(tags$ul(
+                                      tags$li("include here if needed to mention limitations."),
+                                      tags$li("......")
+                                    )),
+                                    br(),br()),
+                                  
+                                  fluidRow(
+                                    width = 12,
+                                    h2("!!!STAY SAFE!!!",align = "center")),
+                                  br(),br()
+                                )
+                                
+                                #setBackgroundImage(
+                                #  src = "https://www.fillmurray.com/1920/1080"
+                                #)
                         ),
                         
                         
@@ -246,6 +286,7 @@ ui <- dashboardPage(skin="blue",
                         tabItem(tabName = "Resource",
                                 fluidPage(
                                   column(12,
+                                         br(),
                                          h1(strong("Data We Use"),align = "center"),
                                          br(),
                                          h4(a("NYC Coronavirus Disease 2019 Data", href="https://github.com/nychealth/coronavirus-data"), align="center"),

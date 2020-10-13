@@ -1,7 +1,8 @@
 #Check packages 
 packages.used <- as.list(
   c("shiny", "shinyWidgets","plotly", "htmltools","highcharter","DT","RCurl","htmlwidgets",
-    "ggmap","shinyjs","shinydashboard","dplyr","tibble","leaflet","sparkline","tidyverse","gganimate"))
+    "ggmap","shinyjs","shinydashboard","dplyr","tibble","leaflet","sparkline","tidyverse","gganimate",
+    "ggplot2","xts","viridis","gifski"))
 
 check.pkg<-function(x){
   if(!require(x,character.only=T))
@@ -29,6 +30,14 @@ library(RCurl)
 library(tidyverse)
 library(htmlwidgets)
 library(gganimate)
+
+library(highcharter)
+library(DT)
+
+library(ggplot2)
+library(xts)
+library(viridis)
+library(gifski)
 
 #-----------------------------For main page Quick Update -----------------------
 update_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/summary.csv")

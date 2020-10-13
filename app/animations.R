@@ -1,9 +1,4 @@
-library(tidyverse)
-library(ggplot2)
-library(xts)          
-library(viridis)
-library(gganimate)
-library(gifski)
+
 
 #------------------------------ Animation --------------------------------------------------
 #Create animation line plot of proportion by boro
