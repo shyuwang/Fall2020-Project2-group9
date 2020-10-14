@@ -280,8 +280,7 @@ save(zipcodesBorders, file="output/zipcodes.sp")
 # Get polygons of each boro- use NYC Open Data Geojson
 boroBorders <- geojsonio::geojson_read("../data/Borough Boundaries.geojson", what = 'sp')
 bronxBorder<- subset(boroBorders, boro_name=="Bronx")
-
-
+manBorder <- subset(boroBorders, boro_name=="Manhattan")
 save(boroBorders, file="output/boros.sp")
 
 # Get Neighborhoods 

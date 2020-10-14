@@ -220,11 +220,10 @@ shinyServer(function(input,output, session){
         weight =2, opacity = 1,color = 'white',fillOpacity = 0.7,
         highlight = highlightOptions( weight = 5,color = "#666",fillOpacity = 0.7,
                                       bringToFront = TRUE),
-        label= lapply(seq(nrow(boros_by_age)), function(i){
-          paste0(
-            "Case Rate of Age Range in Boro: ",boros_by_age$BX_CASE_COUNT[i],'<br/>',
-            "Age Range: ",boros_by_age$group[i]
-          )}), htmltools::HTML)%>%
+        label= paste0(
+            "Case Rate of Age Range in Boro: ",boros_by_age$BX_CASE_COUNT,'<br/>',
+            "Age Range: ",boros_by_age$group
+          ))%>%
       addLegend(pal=pal,
                 values = ~boros_by_age$BX_CASE_COUNT,
                 opacity =0.7, 
