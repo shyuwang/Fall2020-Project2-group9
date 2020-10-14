@@ -238,7 +238,7 @@ shinyServer(function(input,output, session){
     # Color palette
     pal <- colorNumeric(
       palette = "YlOrRd",
-      domain = recentMn$COVID_CASE_COUNT_4WEEK
+      domain =0:200
     )
     # Make labels for zipcodes 
     labels <- paste0(
@@ -261,13 +261,12 @@ shinyServer(function(input,output, session){
         highlight = highlightOptions(
           weight = 5,
           color = "#666",
-          
           fillOpacity = 0.7,
           bringToFront = TRUE),
         label= labels)%>%
       addLegend(pal=pal,
-                values = ~recentMn$COVID_CASE_COUNT_4WEEK,
-                opacity =0.7, 
+                values = 0:200,
+                opacity =0.7,
                 title=htmltools::HTML("Covid Case Count <br>
                                       in Past 4 Weeks:<br>
                                       by ZCTA"),
@@ -279,7 +278,7 @@ shinyServer(function(input,output, session){
     # Color palette
     pal <- colorNumeric(
       palette = "YlOrRd",
-      domain = recentBx$COVID_CASE_COUNT_4WEEK
+      domain = 0:200
     )
     # Make labels for zipcodes 
     labels <- paste0(
@@ -302,13 +301,12 @@ shinyServer(function(input,output, session){
         highlight = highlightOptions(
           weight = 5,
           color = "#666",
-          
           fillOpacity = 0.7,
           bringToFront = TRUE),
         label= labels)%>%
       addLegend(pal=pal,
-                values = ~recentBx$COVID_CASE_COUNT_4WEEK,
-                opacity =0.7, 
+                values = 0:200,
+                opacity =0.7,
                 title=htmltools::HTML("Covid Case Count <br>
                                       in Past 4 Weeks:<br>
                                       by ZCTA"),

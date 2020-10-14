@@ -198,7 +198,8 @@ recentBx <- recent_cases%>%
 recentMn <-recent_cases%>%
   select(MODIFIED_ZCTA, COVID_CASE_COUNT_4WEEK)%>%
   filter(MODIFIED_ZCTA %in% manZip$MODIFIED_ZCTA)
-
+recentMn
+recentBx
 
 #--------------------------------------------------------------
 # cumulative case rate across phases by borough & citywide
