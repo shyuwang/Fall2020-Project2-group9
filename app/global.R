@@ -29,7 +29,7 @@ library(RCurl)
 library(tidyverse)
 library(htmlwidgets)
 library(gganimate)
-library(streamgraph)
+
 
 #-----------------------------For main page Quick Update -----------------------
 update_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/summary.csv")
