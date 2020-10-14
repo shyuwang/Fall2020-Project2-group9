@@ -29,6 +29,7 @@ library(RCurl)
 library(tidyverse)
 library(htmlwidgets)
 library(gganimate)
+library(streamgraph)
 
 #-----------------------------For main page Quick Update -----------------------
 update_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/summary.csv")
@@ -256,6 +257,41 @@ amount_res_Mn <- amount_res%>%
 
 amount_res_Bx <-amount_res%>%
   filter(modzcta %in% bronxZip$MODIFIED_ZCTA)
+
+#--------------------------------------------------------------
+
+# ---------------- Data on Covid Cases by poverty --------------
+by_pov_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/by-poverty.csv")
+by_pov <- read.csv(text = by_pov_URL)
+head(by_pov)
+colnames(by_pov)
+colnames(by_pov)[2:4]
+by_pov_df[2:4]
+
+by_pov_df <- by_pov%>%
+  select(POVERTY_GROUP,CASE_RATE_ADJ, HOSPITALIZED_RATE_ADJ, DEATH_RATE_ADJ)
+by_pov_df
+
+case_by_pov_df <- data.frame(
+  pov_group =c("Low poverty","Low poverty","Low poverty",
+               "Medium poverty","Medium poverty","Medium poverty",
+               "High poverty","High poverty","High poverty",
+               "Very high poverty","Very high poverty","Very high poverty"),
+  rates =c("CASE_RATE_ADJ", "HOSPITALIZED_RATE_ADJ", "DEATH_RATE_ADJ",
+           "CASE_RATE_ADJ", "HOSPITALIZED_RATE_ADJ", "DEATH_RATE_ADJ",
+           "CASE_RATE_ADJ", "HOSPITALIZED_RATE_ADJ", "DEATH_RATE_ADJ",
+           "CASE_RATE_ADJ", "HOSPITALIZED_RATE_ADJ", "DEATH_RATE_ADJ"),
+  value=c(2158.10,369.71,125.66,
+          2617.16,577.14,194.72,
+          2850.29,742.60,243.61,
+          3238.73,847.82,272.96)
+)
+case_by_pov_df$pov_group <-factor(case_by_pov_df$pov_group, levels=unique(case_by_pov_df$pov_group))
+colnames(case_by_pov_df)
+
+rate_by_pov<-plot_ly(x=case_by_pov_df$pov_group, y = case_by_pov_df$value, color=case_by_pov_df$rates)%>%
+  add_lines()
+  
 
 #--------------------------------------------------------------
 # cumulative case rate across phases by borough & citywide

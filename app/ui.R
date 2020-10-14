@@ -189,9 +189,9 @@ ui <- dashboardPage(skin="blue",
                                   fluidRow(plotlyOutput("caseResBoroBar")),
                                   
                                   # Section with Visualizations about specific boros 
-                                  fluidRow(column(6, box(
-                                    HTML("Interestingly, Manhattan has the highest proportion of reopened restaurants but the lowest case rate.
-                                         Below, users can explore pivotal differences between the Bronx and Manhattan, such as Case rate per age group"), width='200px')),
+                                  fluidRow(column(12, h4(
+                                    "Interestingly, Manhattan has the highest proportion of reopened restaurants but the lowest case rate.
+                                         Below, users can explore pivotal differences between the Bronx and Manhattan, such as Case rate per age group")),
                                     
                                     column(6, selectizeInput(
                                       'age_group',
@@ -213,9 +213,21 @@ ui <- dashboardPage(skin="blue",
                                   ),
                                   
                                   fluidRow(column(6, titlePanel('Case Count Past 4 Weeks: Manhattan'),
-                                                  leafletOutput('case_pct_chg_Mn', height = "400px")),
+                                                  leafletOutput('case_4week_Mn', height = "400px")),
                                            column(6, titlePanel('Case Count Past 4 Weeks: The Bronx'),
-                                                  leafletOutput('case_pct_chg_Bx', height = "400px"))        
+                                                  leafletOutput('case_4week_Bx', height = "400px"))        
+                                           
+                                  ),
+                                  
+                                  fluidRow(column(12, titlePanel('Case Rate by Poverty Group'),
+                                                  plotlyOutput('case_by_pov'))        
+                                           
+                                  ),
+                                  
+                                  fluidRow(column(6, titlePanel('Amount of Restaurants in: Manhattan'),
+                                                  leafletOutput('res_amt_Mn', height = "400px")),
+                                           column(6, titlePanel('Amount of Restaurants in: The Bronx'),
+                                                  leafletOutput('res_amt_Bx', height = "400px"))        
                                            
                                   )
                                   

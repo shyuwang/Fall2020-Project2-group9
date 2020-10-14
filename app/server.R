@@ -208,7 +208,7 @@ shinyServer(function(input,output, session){
       # Color palette
       pal <- colorNumeric(
         palette = "YlGnBu",
-        domain = boros_by_age$BX_CASE_RATE
+        domain = 0:7000
       )
       leaflet(bronxBorder, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
       setView(lng=-73.8648, lat=40.8448, zoom = 11)%>%
@@ -225,7 +225,7 @@ shinyServer(function(input,output, session){
         )
       )%>%
       addLegend(pal=pal,
-                values = ~boros_by_age$BX_CASE_RATE,
+                values = 0:7000,
                 opacity =0.7, 
                 title=htmltools::HTML("Case Rate of Age<br>
                                       Group in Neighborhood"),
@@ -237,7 +237,7 @@ shinyServer(function(input,output, session){
     # Color palette
     pal <- colorNumeric(
       palette = "YlGnBu",
-      domain = boros_by_age$MN_CASE_RATE
+      domain = 0:7000
     )
     leaflet(manBorder, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
       setView(lng=-73.9712, lat=40.7831, zoom = 11)%>%
@@ -254,7 +254,7 @@ shinyServer(function(input,output, session){
         )
       )%>%
       addLegend(pal=pal,
-                values = ~boros_by_age$MN_CASE_RATE,
+                values = 0:7000,
                 opacity =0.7, 
                 title=htmltools::HTML("Case Rate of Age<br>
                                       Group in Neighborhood"),
@@ -342,6 +342,13 @@ shinyServer(function(input,output, session){
                                       by ZCTA"),
                 position ='topleft')
     
+  })
+  
+  
+  # Cases per poverty group
+  output$case_by_pov <-renderPlotly({
+    
+    rate_by_pov
   })
 
   # Amounts of restaurants in each zipcode
