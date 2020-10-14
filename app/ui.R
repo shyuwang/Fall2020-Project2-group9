@@ -13,8 +13,8 @@ ui <- dashboardPage(skin="blue",
                         menuItem("Results", tabName = "Results", icon = icon("chart-bar"),
                                  startExpanded = TRUE,
                                  menuSubItem("Open Restaurant Report",tabName = "Report"),
-                                 menuSubItem("Plot Analysis 1",tabName = "Analysis1"),
-                                 menuSubItem("Plot Analysis 2",tabName = "Analysis2")),
+                                 menuSubItem("Results 1",tabName = "Analysis1"),
+                                 menuSubItem("Results 2",tabName = "Analysis2")),
                         menuItem("Suggestions", tabName = "Suggestions", icon = icon("heart")),
                         menuItem("Resource", tabName = "Resource", icon = icon("info-circle")),
                         menuItem("Contact", tabName = "Contact", icon = icon("address-card"))
@@ -270,10 +270,14 @@ ui <- dashboardPage(skin="blue",
                                   
                                   fluidRow(
                                     column(12,
-                                           h4("In this plot, we analyzed...and found that..."),
+                                           h4("On this page, graphs about case rates across NYC Phases of Reopening and Reopened Restaurants can be found"),
                                            tags$div(tags$ul(
-                                             tags$li(h4("...")),
-                                             tags$li(h4("..."))
+                                             tags$li(h4("In the first plot, case rates begin to rise mid August. 
+                                                        This could be due to many causes: children returning to school, adults to work, or people increasinly
+                                                        not abiding to social distancing guidelines.")),
+                                             tags$li(h4("There is no direct trend showing increasing case rates are related to restaurant reopening")),
+                                             tags$li(h4("But as New York City opens up indoor dining, the risk of COVID spread increases. As more restaurants 
+                                                        reopen for indoor dining, users of this Shiny can track how case rates fluctuate, and see trends as they develop."))
                                            ))
                                     )),
                                   
@@ -297,6 +301,28 @@ ui <- dashboardPage(skin="blue",
                                   column(12,
                                          h4("There are some limitations of this project"),
                                          p(""),
+                                         br(),
+                                         h4("We could only access new COVID-19 cases by Modified Zip Code Tabulated Area for the most recent 4 weeks. Previous data 
+                                         sets of kind are aggregated with the total cases per respective boro once the next four week cycle begins. If we were able 
+                                         to access this data from June 1st,  to present, data visualizations specific to each neighborhood could have been made. 
+                                         By representing data from june 1st to present, changes across the four phases of reopening could have been found."),
+                                         p(""),
+                                         br(),
+                                         h4("On a similar note, the reopened restaurant data was very useful for our purposes, but if the data set included 
+                                         a variable for “date of approved reopening application”, the pace of restaurants reopening each neighborhood could have been tracked."),
+                                         p(""),
+                                         br(),
+                                         h4("Although our analysis did not show any strong trends between restaurants reopening, this analysis will become more important as 
+                                         temperatures in New York drop and diners are not able to eat and recreate outdoors. 
+On September 25th, Mayor Bill de Blasio announced that previously unallowed outdoor heat lamps will now be legal for restaurant use, and some restaurants are getting creative 
+                                            with bubble-domes meant to insulate patrons from cold air and other patrons' exhalations 
+                                            (Source: New York Times, 2020)
+                                            Despite these inventive solutions, outdoor dining cannot be a reality for long. With cooling temperatures approaching and New York entering
+                                            new phases of reopening, analyses and data visualizations like the ones found in this Shiny app should be utilized by New York diners
+                                            to track rates of COVID cases in their favorite dining neighborhoods."),
+                                         p(""),
+                                         p(""),
+                                         br(),
                                          h4("We  will give some suggestions based on our analyses. Beside, more health suggestions could be found on CDC website. URL"),
                                          tags$div(tags$ul(
                                            tags$li("When you want to dine out, please take the neighborhood’s recent new case rate and positivity rate into consideration."),
@@ -312,7 +338,7 @@ ui <- dashboardPage(skin="blue",
                         tabItem(tabName = "Resource",
                                 fluidPage(
                                   column(12,
-                                         h1(strong("Data We Use"),align = "center"),
+                                         h1(strong("Data We Used"),align = "center"),
                                          br(),
                                          h4(a("NYC Coronavirus Disease 2019 Data", href="https://github.com/nychealth/coronavirus-data"), align="center"),
                                          h4(a("JHU CSSE Covid-19 Data",href="https://github.com/CSSEGISandData/COVID-19"), align="center"),
