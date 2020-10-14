@@ -188,17 +188,240 @@ shinyServer(function(input,output, session){
     })
   
   output$resAnimation <- renderImage({
-    list(src = "output/rest_boro_ani.gif",
+    list(src = "./output/rest_boro_ani.gif",
          contentType = 'image/gif')
   },deleteFile=FALSE)
   
   output$caseAnimation <- renderImage({
-    list(src = "output/case_boro_ani.gif",
+    list(src = "./output/case_boro_ani.gif",
          contentType = 'image/gif')
   },deleteFile=FALSE)
   
+  # -------- Plots Comparing Manhattan and the Bronx Map Cases by Age-----------  
+  age_input <- reactive({
+    if(is.null(input$age_group)){age_input ="65-74"}
+    else{age_input = input$age_group}
+  })
+
+ 
+  output$case_age_Bx <- renderLeaflet({
+      # Color palette
+      pal <- colorNumeric(
+        palette = "YlGnBu",
+        domain = 0:7000
+      )
+      leaflet(bronxBorder, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
+      setView(lng=-73.8648, lat=40.8448, zoom = 11)%>%
+      addTiles()%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(
+        fillColor = ~pal(boros_by_age$BX_CASE_RATE[boros_by_age$group==age_input()]),
+        weight =2, opacity = 1,color = 'white',fillOpacity = 0.7,
+        highlight = highlightOptions( weight = 5,color = "#666",fillOpacity = 0.7,
+                                      bringToFront = TRUE),
+        label= HTML(
+          "Case Rate of Age Range in Boro: ",boros_by_age$BX_CASE_RATE[boros_by_age$group==age_input()],'<br/>',
+          "Age Range: ", age_input()
+        )
+      )%>%
+      leaflet::addLegend(pal=pal,
+                values = 0:7000,
+                opacity =0.7, 
+                title=htmltools::HTML("Case Rate of Age<br>
+                                      Group in Neighborhood"),
+                position ='bottomright')
+        
+  })
+  
+  output$case_age_Mn <- renderLeaflet({
+    # Color palette
+    pal <- colorNumeric(
+      palette = "YlGnBu",
+      domain = 0:7000
+    )
+    leaflet(manBorder, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
+      setView(lng=-73.9712, lat=40.7831, zoom = 11)%>%
+      addTiles()%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(
+        fillColor = ~pal(boros_by_age$MN_CASE_RATE[boros_by_age$group==age_input()]),
+        weight =2, opacity = 1,color = 'white',fillOpacity = 0.7,
+        highlight = highlightOptions( weight = 5,color = "#666",fillOpacity = 0.7,
+                                      bringToFront = TRUE),
+        label= HTML(
+          "Case Rate of Age Range in Boro: ",boros_by_age$MN_CASE_RATE[boros_by_age$group==age_input()],'<br/>',
+          "Age Range: ", age_input()
+        )
+      )%>%
+      leaflet::addLegend(pal=pal,
+                values = 0:7000,
+                opacity =0.7, 
+                title=htmltools::HTML("Case Rate of Age<br>
+                                      Group in Neighborhood"),
+                position ='bottomright')
+    
+  })
   
   
+  # -------- Plots Comparing Manhattan and the Bronx Map Cases by Zip----------- 
+  output$case_4week_Mn<- renderLeaflet({
+    # Color palette
+    pal <- colorNumeric(
+      palette = "YlOrRd",
+      domain =0:200
+    )
+    # Make labels for zipcodes 
+    labels <- lapply(
+      lapply(seq(nrow(manZip)), function(i){
+        paste0('<b>', manZip[i, "NEIGHBORHOOD_NAME"], "</b>", "<br/>",
+               "Covid Case Count in Past 4 Weeks: ", recentMn[i, "COVID_CASE_COUNT_4WEEK"]) }), htmltools::HTML)
+      
+    leaflet(manZcB, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
+      setView(lng=-73.9712, lat=40.7831, zoom = 11)%>%
+      addTiles()%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(
+        fillColor = ~pal(recent_cases$COVID_CASE_COUNT_4WEEK),
+        weight =2,
+        opacity = 1, 
+        color = 'white',
+        fillOpacity = 0.7,
+        highlight = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.7,
+          bringToFront = TRUE),
+        label= labels)%>%
+      leaflet::addLegend(pal=pal,
+                values = 0:200,
+                opacity =0.7,
+                title=htmltools::HTML("Covid Case Count <br>
+                                      in Past 4 Weeks:<br>
+                                      by ZCTA"),
+                position ='topleft')
+    
+  })
+  
+  output$case_4week_Bx <- renderLeaflet({
+    # Color palette
+    pal <- colorNumeric(
+      palette = "YlOrRd",
+      domain = 0:200
+    )
+    # Make labels for zipcodes 
+    labels <- lapply(
+      lapply(seq(nrow(bronxZip)), function(i){
+        paste0('<b>', bronxZip[i, "NEIGHBORHOOD_NAME"], "</b>", "<br/>",
+               "Covid Case Count in Past 4 Weeks: ", recentBx[i, "COVID_CASE_COUNT_4WEEK"]) }), htmltools::HTML)
+    
+    leaflet(bxZcB, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
+      setView(lng=-73.8971, lat=40.8432, zoom = 11)%>%
+      addTiles()%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(
+        fillColor = ~pal(recent_cases$COVID_CASE_COUNT_4WEEK),
+        weight =2,
+        opacity = 1, 
+        color = 'white',
+        fillOpacity = 0.7,
+        highlight = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.7,
+          bringToFront = TRUE),
+        label= labels)%>%
+      leaflet::addLegend(pal=pal,
+                values = 0:200,
+                opacity =0.7,
+                title=htmltools::HTML("Covid Case Count <br>
+                                      in Past 4 Weeks:<br>
+                                      by ZCTA"),
+                position ='topleft')
+    
+  })
+  
+  
+  # Cases per poverty group
+  output$case_by_pov <-renderPlotly({
+    
+    rate_by_pov
+  })
+
+  # Amounts of restaurants in each zipcode
+  
+  output$res_amt_Mn <- renderLeaflet({
+    # Color palette
+    pal <- colorNumeric(
+      palette = "BuPu",
+      domain = amount_res$amount
+    )
+    # Make labels for zipcodes 
+    labels <- lapply(
+      lapply(seq(nrow(manZip)), function(i){
+        paste0('<b>', manZip[i, "NEIGHBORHOOD_NAME"], "</b>", "<br/>",
+               "Covid Case Count in Past 4 Weeks: ", amount_res_Mn[i, "amount"]) }), htmltools::HTML)
+    
+    leaflet(manZcB, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
+      setView(lng=-73.9712, lat=40.7831, zoom = 11)%>%
+      addTiles()%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(
+        fillColor = ~pal(amount_res_Mn$amount),
+        weight =2,
+        opacity = 1, 
+        color = 'white',
+        fillOpacity = 0.7,
+        highlight = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.7,
+          bringToFront = TRUE),
+        label= labels)%>%
+      leaflet::addLegend(pal=pal,
+                values = amount_res$amount,
+                opacity =0.7,
+                title=htmltools::HTML("Amount of Restaurants<br>
+                                      by ZCTA"),
+                position ='topleft')
+    
+  })
+  
+  output$res_amt_Bx <- renderLeaflet({
+    # Color palette
+    pal <- colorNumeric(
+      palette = "BuPu",
+      domain = amount_res$amount
+    )
+    # Make labels for zipcodes 
+    labels <- lapply(
+      lapply(seq(nrow(bronxZip)), function(i){
+        paste0('<b>', bronxZip[i, "NEIGHBORHOOD_NAME"], "</b>", "<br/>",
+               "Covid Case Count in Past 4 Weeks: ", amount_res_Bx[i, "amount"]) }), htmltools::HTML)
+    
+    leaflet(bxZcB, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
+      setView(lng=-73.8971, lat=40.8432, zoom = 11)%>%
+      addTiles()%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(
+        fillColor = ~pal(amount_res_Mn$amount),
+        weight =2,
+        opacity = 1, 
+        color = 'white',
+        fillOpacity = 0.7,
+        highlight = highlightOptions(
+          weight = 5,
+          color = "#666",
+          fillOpacity = 0.7,
+          bringToFront = TRUE),
+        label= labels)%>%
+      leaflet::addLegend(pal=pal,
+                values = amount_res$amount,
+                opacity =0.7,
+                title=htmltools::HTML("Amount of Restaurants<br>
+                                      by ZCTA"),
+                position ='topleft')
+    
+  })
   
 })
 }
