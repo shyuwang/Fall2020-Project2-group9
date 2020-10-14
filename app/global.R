@@ -186,7 +186,18 @@ case_res_bar <- plot_ly() %>%
 age_boroURL <-getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/boro/boroughs-by-age.csv')
 all_boros_by_age <- read.csv(text=age_boroURL)
 boros_by_age <-all_boros_by_age%>%
-  select(group, BX_CASE_COUNT, BX_CASE_RATE, MN_CASE_COUNT, MN_CASE_RATE)
+  select(group, BX_CASE_COUNT, BX_DEATH_RATE, BX_CASE_RATE, MN_CASE_COUNT, MN_CASE_RATE, MN_DEATH_RATE)
+
+# ---------------- Recent covid cases of boros of interest: Bx, Mn --------------
+
+# Updates daily
+recentBx <- recent_cases%>%
+  select(MODIFIED_ZCTA,COVID_CASE_COUNT_4WEEK)%>%
+  filter(MODIFIED_ZCTA %in% bronxZip$MODIFIED_ZCTA)
+
+recentMn <-recent_cases%>%
+  select(MODIFIED_ZCTA, COVID_CASE_COUNT_4WEEK)%>%
+  filter(MODIFIED_ZCTA %in% manZip$MODIFIED_ZCTA)
 
 
 #--------------------------------------------------------------
@@ -272,10 +283,17 @@ boro_phase <- plot_ly(data=boro_phase_cases, x=~phase) %>%
                                     'phase4-4','phase4-5','phase4-indoor'),
                     tickmode = "array"), yaxis=list(title='Case Rate (per 100,000)'))
 
-#--------------------------------------------------------------
+#-------------------Get geographical data about neighborhoods and boros-------------------------------------------
 # Get geojson data from NYC Open Health file, convert zip coe
 zipcodesBorders <- geojsonio::geojson_read("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/Geography-resources/MODZCTA_2010_WGS1984.geo.json", what = 'sp')
 save(zipcodesBorders, file="output/zipcodes.sp")
+
+
+#Only Manhattan zipcode borders
+manZcB <-zipcodesBorders[zipcodesBorders$MODZCTA %in% manZip$MODIFIED_ZCTA,]
+
+# Only Bronx Zipcode Borders
+bxZcB <-zipcodesBorders[zipcodesBorders$MODZCTA %in% bronxZip$MODIFIED_ZCTA,]
 
 # Get polygons of each boro- use NYC Open Data Geojson
 boroBorders <- geojsonio::geojson_read("../data/Borough Boundaries.geojson", what = 'sp')
@@ -283,9 +301,17 @@ bronxBorder<- subset(boroBorders, boro_name=="Bronx")
 manBorder <- subset(boroBorders, boro_name=="Manhattan")
 save(boroBorders, file="output/boros.sp")
 
+
 # Get Neighborhoods 
 data_by_modzctaURL <- getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/data-by-modzcta.csv')
 data_by_modzcta <- read.csv(text= data_by_modzctaURL)
 neighborhoods<- data_by_modzcta%>%
   select(MODIFIED_ZCTA,NEIGHBORHOOD_NAME, BOROUGH_GROUP)
 
+bronxZip <-neighborhoods%>%
+  filter(BOROUGH_GROUP=="Bronx")
+
+manZip <-neighborhoods%>%
+  filter(BOROUGH_GROUP=="Manhattan")
+
+#--------------------------------------------------------------

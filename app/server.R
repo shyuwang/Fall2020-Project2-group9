@@ -197,9 +197,9 @@ shinyServer(function(input,output, session){
          contentType = 'image/gif')
   },deleteFile=FALSE)
   
-  # -------- Plots Comparing Manhattan and the Bronx Map -----------------  
+  # -------- Plots Comparing Manhattan and the Bronx Map Cases by Age-----------  
   filtered_data_map_age <- reactive({
-    if(is.null(input$age_group)){selected_age_group = levels(boros_by_age$group)}
+    if(is.null(input$age_group)){selected_age_group = boros_by_age$group}
     else{selected_age_group = input$age_group}
     boros_by_age %>%
       filter(group == selected_age_group)
@@ -209,31 +209,113 @@ shinyServer(function(input,output, session){
       # Color palette
       pal <- colorNumeric(
         palette = "YlGnBu",
-        domain = boros_by_age$BX_CASE_COUNT
+        domain = boros_by_age$BX_CASE_RATE
       )
       leaflet(bronxBorder, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
       setView(lng=-73.8648, lat=40.8448, zoom = 11)%>%
       addTiles()%>%
       addProviderTiles(providers$CartoDB.Positron)%>%
       addPolygons(
-        fillColor = ~pal(boros_by_age$BX_CASE_COUNT),
+        fillColor = ~pal(boros_by_age$BX_CASE_RATE),
         weight =2, opacity = 1,color = 'white',fillOpacity = 0.7,
         highlight = highlightOptions( weight = 5,color = "#666",fillOpacity = 0.7,
                                       bringToFront = TRUE),
         label= paste0(
-            "Case Rate of Age Range in Boro: ",boros_by_age$BX_CASE_COUNT,'<br/>',
-            "Age Range: ",boros_by_age$group
-          ))%>%
+          "Case Rate of Age Range in Boro: ",boros_by_age$BX_CASE_RATE,'<br/>',
+          "Age Range: ",boros_by_age$group
+        )
+      )%>%
       addLegend(pal=pal,
-                values = ~boros_by_age$BX_CASE_COUNT,
+                values = ~boros_by_age$BX_CASE_RATE,
                 opacity =0.7, 
                 title=htmltools::HTML("Case Rate of Age<br>
                                       Group in Neighborhood"),
                 position ='bottomright')
+        
+  })
+  # -------- Plots Comparing Manhattan and the Bronx Map Cases by Zip----------- 
+  output$case_pct_chg_Mn <- renderLeaflet({
+    # Color palette
+    pal <- colorNumeric(
+      palette = "YlOrRd",
+      domain = recentMn$COVID_CASE_COUNT_4WEEK
+    )
+    # Make labels for zipcodes 
+    labels <- paste0(
+      "Zip Code: ", 
+      manZip$NEIGHBORHOOD_NAME, "<br/>",
+      "Covid Case Count in Past 4 Weeks: ",
+      recentMn$COVID_CASE_COUNT_4WEEK, "%"
+    )%>%
+      lapply(htmltools::HTML)
+    leaflet(manZcB, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
+      setView(lng=-73.9712, lat=40.7831, zoom = 11)%>%
+      addTiles()%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(
+        fillColor = ~pal(recentMn$COVID_CASE_COUNT_4WEEK),
+        weight =2,
+        opacity = 1, 
+        color = 'white',
+        fillOpacity = 0.7,
+        highlight = highlightOptions(
+          weight = 5,
+          color = "#666",
+          
+          fillOpacity = 0.7,
+          bringToFront = TRUE),
+        label= labels)%>%
+      addLegend(pal=pal,
+                values = ~recentMn$COVID_CASE_COUNT_4WEEK,
+                opacity =0.7, 
+                title=htmltools::HTML("Covid Case Count <br>
+                                      in Past 4 Weeks:<br>
+                                      by ZCTA"),
+                position ='topleft')
+    
   })
   
-  
-  
+  output$case_pct_chg_Bx <- renderLeaflet({
+    # Color palette
+    pal <- colorNumeric(
+      palette = "YlOrRd",
+      domain = recentBx$COVID_CASE_COUNT_4WEEK
+    )
+    # Make labels for zipcodes 
+    labels <- paste0(
+      "Zip Code: ", 
+      bronxZip$NEIGHBORHOOD_NAME, "<br/>",
+      "Covid Case Count in Past 4 Weeks: ",
+      recentMn$COVID_CASE_COUNT_4WEEK, "%"
+    )%>%
+      lapply(htmltools::HTML)
+    leaflet(bxZcB, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
+      setView(lng=-73.8971, lat=40.8432, zoom = 11)%>%
+      addTiles()%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(
+        fillColor = ~pal(recentBx$COVID_CASE_COUNT_4WEEK),
+        weight =2,
+        opacity = 1, 
+        color = 'white',
+        fillOpacity = 0.7,
+        highlight = highlightOptions(
+          weight = 5,
+          color = "#666",
+          
+          fillOpacity = 0.7,
+          bringToFront = TRUE),
+        label= labels)%>%
+      addLegend(pal=pal,
+                values = ~recentBx$COVID_CASE_COUNT_4WEEK,
+                opacity =0.7, 
+                title=htmltools::HTML("Covid Case Count <br>
+                                      in Past 4 Weeks:<br>
+                                      by ZCTA"),
+                position ='topleft')
+    
+  })
+
   
 })
 }
