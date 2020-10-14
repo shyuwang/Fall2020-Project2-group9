@@ -191,7 +191,7 @@ ui <- dashboardPage(skin="blue",
                                   # Section with Visualizations about specific boros 
                                   fluidRow(column(12, h4(
                                     "Interestingly, Manhattan has the highest proportion of reopened restaurants but the lowest case rate.
-                                         Below, users can explore pivotal differences between the Bronx and Manhattan, such as Case rate per age group")),
+                                         Below, users can explore pivotal differences between the Bronx and Manhattan, such as case rate per age group")),
                                     
                                     column(6, selectizeInput(
                                       'age_group',
@@ -212,6 +212,15 @@ ui <- dashboardPage(skin="blue",
                                            
                                   ),
                                   
+                                  fluidRow(column(12, h4(
+                                    "Across all adult age groups, the Bronx has a visibly higher case rate. 
+                                    This difference is widest across working aged people. Among 18-44 year olds, 
+                                    Manhattan’s case rate is 1710 and the Bronx’s is  3721. For older working 
+                                    aged people, 45-64 year olds, the difference is larger with a case rate of
+                                    2590 in Manhattan and 5729 in The Bronx. "))
+                                    ),
+                                    
+                                  
                                   fluidRow(column(6, titlePanel('Case Count Past 4 Weeks: Manhattan'),
                                                   leafletOutput('case_4week_Mn', height = "400px")),
                                            column(6, titlePanel('Case Count Past 4 Weeks: The Bronx'),
@@ -223,15 +232,35 @@ ui <- dashboardPage(skin="blue",
                                                   plotlyOutput('case_by_pov'))        
                                            
                                   ),
+                                  fluidRow(column(12, h4(
+                                    "Higher case rates are enough to discourage people from dining out, but we also
+                                    know that COVID-19 has had a tremendous impact on people’s financial wellbeing. 
+                                    But from the plot above, we can see that case and hospitalization rates are also 
+                                    correlated with poverty. The graph above shows that how impoverished one is, the
+                                    likelier they are to contract COVID and/or be hospitalized. Seeing that Manhattan 
+                                    is richer than the Bronx,  Manhattanites on whole are less likely to contract the
+                                    virus and be hospitalized from the virus. This may have an affect on restaurant
+                                    patronage, and in turn restaurants are less likely to reopen. Restaurant staffs
+                                    in the Bronx may have been hit harder by COVID, or may have greater economic
+                                    problems that are limiting their reopening."))
+                                    ),
                                   
                                   fluidRow(column(6, titlePanel('Amount of Restaurants in: Manhattan'),
                                                   leafletOutput('res_amt_Mn', height = "400px")),
                                            column(6, titlePanel('Amount of Restaurants in: The Bronx'),
                                                   leafletOutput('res_amt_Bx', height = "400px"))        
                                            
-                                  )
+                                  ),
+                                  fluidRow(column(12, h4(
+                                    "As we can see above, the amount of restaurants in Manhattan in downtown neighborhoods, 
+                                    greatly dwarfs the amount of restaurants in upper Manhattan which borders the Bronx. 
+                                    The Bronx, on the other hand, does not have nearly as many restaurants as downtown 
+                                    Manhattan. This could arise from any of the nuanced differences between Manhattan and
+                                    the Bronx, some of which can be seen on the graphs on this page. "))
+                                  ),
                                   
-                                  )),
+                                )),
+                                  
                         
                         #Analysis2
                         tabItem(tabName = "Analysis2",
@@ -262,9 +291,6 @@ ui <- dashboardPage(skin="blue",
                                 )),
                         
                        
-                        
-                        
-                        
                         #Suggestions
                         tabItem(tabName = "Suggestions",
                                 fluidPage(
