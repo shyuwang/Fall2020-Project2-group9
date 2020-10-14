@@ -186,10 +186,31 @@ ui <- dashboardPage(skin="blue",
                                   
                                   
                                   #####or plot here
-                                  fluidRow(plotlyOutput("caseResBoroBar"))
+                                  fluidRow(plotlyOutput("caseResBoroBar")),
                                   
+                                  # Section with Visualizations about specific boros 
+                                  fluidRow(column(6, box(
+                                    HTML("Interestingly, Manhattan has the highest proportion of reopened restaurants but the lowest case rate.
+                                         Below, users can explore pivotal differences between the Bronx and Manhattan, such as Case rate per age group"), width='200px')),
+                                    
+                                    column(6, selectizeInput(
+                                      'group',
+                                      'Choose an age group',
+                                      choices = c(
+                                        'Choose an age group' = '',
+                                        '0-17',
+                                        '18-44',
+                                        '45-64',
+                                        '65-74',
+                                        '75+'), multiple = F))
+                                  ),
                                   
-                                  
+                                  fluidRow(column(6, titlePanel('Case Rate Per Age Group: Manhattan'),
+                                                  leafletOutput('case_age_Mn', height = "400px")),
+                                           column(6, titlePanel('Case Rate Per Age Group: The Bronx'),
+                                                  leafletOutput('case_age_Bx', height = "400px"))        
+                                           
+                                  )
                                   
                                   )),
                         

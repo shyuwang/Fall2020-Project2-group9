@@ -198,6 +198,43 @@ shinyServer(function(input,output, session){
   },deleteFile=FALSE)
   
   
+  filtered_data_map <- reactive({
+    if(is.null(input$group)){selected_age_group = levels(boros_by_age$group)}
+    else{selected_age_group = input$group}
+    boros_by_age %>%
+      filter(group %in% selected_age_group)
+  })
+  
+  output$case_age_Bx <- renderLeaflet({
+    # Color palette
+    pal <- colorNumeric(
+      palette = "YlGnBu",
+      domain = boros_by_age$BX_CASE_COUNT
+    )
+
+    map <-zipcodes%>%
+      leaflet(options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
+      setView(lng=-73.8648, lat=40.8448, zoom = 11)%>%
+      addTiles()%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(
+        fillColor = ~pal(boros_by_age$BX_CASE_COUNT),
+        weight =2, opacity = 1,color = 'white',fillOpacity = 0.7,
+        highlight = highlightOptions( weight = 5,color = "#666",fillOpacity = 0.7,
+          bringToFront = TRUE),
+        label= paste0(
+          "Zip Code: ",recent_4_week$NEIGHBORHOOD_NAME, "<br/>",
+          "Case Rate of Age Range in Neighborhood: ",boros_by_age$BX_CASE_COUNT,
+          "<br/>","Age Range ",boros_by_age$group
+        ))%>%
+      lapply(htmltools::HTML)
+      addLegend(pal=pal,
+                values = ~boros_by_age$BX_CASE_COUNT,
+                opacity =0.7, 
+                title=htmltools::HTML("Case Rate of Age<br>
+                                      Group in Neighborhood"),
+                position ='topleft')
+  })
   
   
 })

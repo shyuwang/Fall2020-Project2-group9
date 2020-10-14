@@ -139,7 +139,12 @@ by_boro_pop <- by_boro %>%
   mutate(population=CASE_COUNT*100000/CASE_RATE) %>%
   select(BOROUGH_GROUP, population) %>%
   filter(BOROUGH_GROUP!="Citywide")
-levels(by_boro_pop$BOROUGH_GROUP)[6]='Staten Island'
+levels(by_boro_pop$BOROUGH_GROUP)[1]='Bronx'
+levels(by_boro_pop$BOROUGH_GROUP)[2]='Brooklyn'
+levels(by_boro_pop$BOROUGH_GROUP)[3]='Manhattan'
+levels(by_boro_pop$BOROUGH_GROUP)[4]='Queens'
+levels(by_boro_pop$BOROUGH_GROUP)[5]='Staten Island'
+levels(by_boro_pop$BOROUGH_GROUP)[6]='Citywide'
 by_boro_pop$BOROUGH_GROUP <- as.character(by_boro_pop$BOROUGH_GROUP)
 
 # case rate (per 100000) by the beginning of phase 2, by borough
@@ -169,6 +174,20 @@ case_res_bar <- plot_ly() %>%
   yaxis2 = ay,
   xaxis = list(title=""),
   yaxis = list(title = "Case Rate (per 100,000)"))
+
+
+
+
+
+
+# ---------------- Number of cases by age group by boro of interest: Bx, Mn --------------
+
+# Updates daily
+age_boroURL <-getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/boro/boroughs-by-age.csv')
+all_boros_by_age <- read.csv(text=url3)
+boros_by_age <-all_boros_by_age%>%
+  select(group, BX_CASE_COUNT, BX_CASE_RATE, MN_CASE_COUNT, MN_CASE_RATE)
+  
 
 #--------------------------------------------------------------
 # cumulative case rate across phases by borough & citywide
@@ -204,7 +223,7 @@ boro_cases2 <- boro_ts_cases %>%
 by_boro_pop <- by_boro %>%
   mutate(population=CASE_COUNT*100000/CASE_RATE) %>%
   select(BOROUGH_GROUP, population)
-levels(by_boro_pop$BOROUGH_GROUP)[6]='Staten Island'
+
 by_boro_pop$BOROUGH_GROUP <- as.character(by_boro_pop$BOROUGH_GROUP)
 
 
@@ -254,3 +273,6 @@ boro_phase <- plot_ly(data=boro_phase_cases, x=~phase) %>%
                     tickmode = "array"), yaxis=list(title='Case Rate (per 100,000)'))
 
 
+# Get geojson data from NYC Open Health file, convert zip coe
+zipcodes <- geojsonio::geojson_read("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/Geography-resources/MODZCTA_2010_WGS1984.geo.json", what = 'sp')
+save(zipcodes, file="output/zipcodes.sp")
