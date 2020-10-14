@@ -18,7 +18,7 @@ Term: Fall 2020
 	+ Shuyuan Wang
 	+ Natalie Williams
 	
-+ Shiny Link: https://yiqilei.shinyapps.io/NYC-COVID-DINING/
++ Shiny Link: https://installserverrrr.shinyapps.io/apppppp/
 
 + **Project summary**: 
 

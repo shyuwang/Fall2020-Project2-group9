@@ -1,0 +1,13 @@
+name: appzzzzz
+title: appzzzzz
+username:
+account: yiqilei
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3016922
+bundleId: 3741745
+url: https://yiqilei.shinyapps.io/appzzzzz/
+when: 1602708968.71256
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: modified_rest_boro.R|README.md|www/.DS_Store
