@@ -210,6 +210,13 @@ ui <- dashboardPage(skin="blue",
                                            column(6, titlePanel('Case Rate Per Age Group: The Bronx'),
                                                   leafletOutput('case_age_Bx', height = "400px"))        
                                            
+                                  ),
+                                  
+                                  fluidRow(column(6, titlePanel('Case Count Past 4 Weeks: Manhattan'),
+                                                  leafletOutput('case_pct_chg_Mn', height = "400px")),
+                                           column(6, titlePanel('Case Count Past 4 Weeks: The Bronx'),
+                                                  leafletOutput('case_pct_chg_Bx', height = "400px"))        
+                                           
                                   )
                                   
                                   )),
