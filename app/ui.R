@@ -137,7 +137,8 @@ ui <- dashboardPage(skin="blue",
                         tabItem(tabName = "Analysis2",
                                 fluidPage(
                                   
-                                  ####plot
+                                  ####plot- 
+                                  leafletOutput("case_age_Bx"),
                                   
                                   fluidRow(
                                     column(12,
@@ -150,7 +151,7 @@ ui <- dashboardPage(skin="blue",
                                   
                                   
                                   #####or plot here
-                                  
+                                  leafletOutput("case_age_Mn"),
                                   
                                   
                                 )),

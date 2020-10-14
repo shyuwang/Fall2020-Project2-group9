@@ -18,6 +18,8 @@ shinyServer(function(input,output, session){
   #  html_nodes("td")%>%html_text()
   url2<- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/recent/recent-4-week-by-modzcta.csv")
   recent_4_week <- read.csv(text=url2)
+  url3 <-getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/boro/boroughs-by-age.csv')
+  boros_by_age <- read.csv(text=url3)
   zipcodes <- geojsonio::geojson_read("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/Geography-resources/MODZCTA_2010_WGS1984.geo.json", what = 'sp')
   
   load(file="./output/res_amounts.RData")
@@ -134,6 +136,52 @@ shinyServer(function(input,output, session){
                 position ='topleft')
   })
 
+  # Natalie - age distribution of covid bx 
+  output$case_age_Bx <- renderLeaflet({
+    # Color palette
+    pal <- colorNumeric(
+      palette = "YlGnBu",
+      domain = boros_by_age$BX_CASE_COUNT
+    )
+    # Make labels for zipcodes 
+    labels <- paste0(
+      "Zip Code: ", 
+      recent_4_week$NEIGHBORHOOD_NAME, "<br/>",
+      "Case Rate of Age Range in Neighborhood: ",
+      boros_by_age$BX_CASE_COUNT ,"<br/>",
+      "Age Range ",
+      boros_by_age$group
+    )%>%
+      lapply(htmltools::HTML)
+    
+    map <-zipcodes%>%
+      leaflet()%>%
+      setView(lng=-73.8648, lat=40.8448, zoom = 11)%>%
+      addTiles()%>%
+      addProviderTiles(providers$CartoDB.Positron)%>%
+      addPolygons(
+        fillColor = ~pal(boros_by_age$BX_CASE_COUNT),
+        weight =2,
+        opacity = 1, 
+        color = 'white',
+        fillOpacity = 0.7,
+        highlight = highlightOptions(
+          weight = 5,
+          color = "#666",
+          
+          fillOpacity = 0.7,
+          bringToFront = TRUE),
+        label= labels)%>%
+      addLegend(pal=pal,
+                values = ~boros_by_age$BX_CASE_COUNT,
+                opacity =0.7, 
+                title=htmltools::HTML("Case Rate of Age<br>
+                                      Group in Neighborhood"),
+                position ='topleft')
+  })
+  
+  # Natalie - Age distribution of covid cases manh
+  
   
 })
 
