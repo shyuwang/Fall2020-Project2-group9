@@ -197,23 +197,21 @@ shinyServer(function(input,output, session){
          contentType = 'image/gif')
   },deleteFile=FALSE)
   
-  
+  # -------- Plots Comparing Manhattan and the Bronx Map -----------------  
   filtered_data_map_age <- reactive({
-    if(is.null(input$group)){selected_age_group = levels(boros_by_age$group)}
-    else{selected_age_group = input$group}
+    if(is.null(input$age_group)){selected_age_group = levels(boros_by_age$group)}
+    else{selected_age_group = input$age_group}
     boros_by_age %>%
-      filter(group %in% selected_age_group)
+      filter(group == selected_age_group)
   })
   
   output$case_age_Bx <- renderLeaflet({
-    # Color palette
-    pal <- colorNumeric(
-      palette = "YlGnBu",
-      domain = boros_by_age$BX_CASE_COUNT
-    )
-
-    map <-boroBorders%>%
-      leaflet(options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
+      # Color palette
+      pal <- colorNumeric(
+        palette = "YlGnBu",
+        domain = boros_by_age$BX_CASE_COUNT
+      )
+      leaflet(bronxBorder, options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
       setView(lng=-73.8648, lat=40.8448, zoom = 11)%>%
       addTiles()%>%
       addProviderTiles(providers$CartoDB.Positron)%>%
@@ -221,35 +219,22 @@ shinyServer(function(input,output, session){
         fillColor = ~pal(boros_by_age$BX_CASE_COUNT),
         weight =2, opacity = 1,color = 'white',fillOpacity = 0.7,
         highlight = highlightOptions( weight = 5,color = "#666",fillOpacity = 0.7,
-          bringToFront = TRUE),
-        label= paste0(
-          "Case Rate of Age Range in Boro: ",boros_by_age$BX_CASE_COUNT,
-          "<br/>","Age Range ",boros_by_age$group
-        ))%>%
-      lapply(htmltools::HTML)
+                                      bringToFront = TRUE),
+        label= lapply(seq(nrow(boros_by_age)), function(i){
+          paste0(
+            "Case Rate of Age Range in Boro: ",boros_by_age$BX_CASE_COUNT[i],'<br/>',
+            "Age Range: ",boros_by_age$group[i]
+          )}), htmltools::HTML)%>%
       addLegend(pal=pal,
                 values = ~boros_by_age$BX_CASE_COUNT,
                 opacity =0.7, 
                 title=htmltools::HTML("Case Rate of Age<br>
                                       Group in Neighborhood"),
-                position ='topleft')
+                position ='bottomright')
   })
   
-  observe({
-    temp_df_age = filtered_data_map_age()
-    leafletProxy('case_age_Bx',data = temp_df_age) %>%
-      fitBounds(~min(longitude), ~min(latitude), ~max(longitude), ~max(latitude)) %>%
-      addPolygons(
-        fillColor = ~pal(temp_df_age$BX_CASE_COUNT),
-        weight =2, opacity = 1,color = 'white',fillOpacity = 0.7,
-        highlight = highlightOptions( weight = 5,color = "#666",fillOpacity = 0.7,
-                                      bringToFront = TRUE),
-        label= paste0(
-          "Case Rate of Age Range in Neighborhood: ",temp_df_age$BX_CASE_COUNT,
-          "<br/>","Age Range ",temp_df_age$group
-        ))%>%
-      lapply(htmltools::HTML) 
-  })
+  
+  
   
 })
 }

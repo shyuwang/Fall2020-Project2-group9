@@ -194,7 +194,7 @@ ui <- dashboardPage(skin="blue",
                                          Below, users can explore pivotal differences between the Bronx and Manhattan, such as Case rate per age group"), width='200px')),
                                     
                                     column(6, selectizeInput(
-                                      'group',
+                                      'age_group',
                                       'Choose an age group',
                                       choices = c(
                                         'Choose an age group' = '',
