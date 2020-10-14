@@ -1,36 +1,46 @@
 # Project 2: Shiny App Development
 
-### [Project Description](doc/project2_desc.md)
+![screenshot](doc/figs/1.png)
+![screenshot](doc/figs/2.png)
+![screenshot](doc/figs/3.png)
+![screenshot](doc/figs/4.png)
+![screenshot](doc/figs/5.png)
+![screenshot](doc/figs/6.png)
 
-![screenshot](doc/figs/map.jpg)
 
-In this second project of GR5243 Applied Data Science, we develop a *Exploratory Data Analysis and Visualization* shiny app on a topic of your choice using [JHU CSSE Covid-19 Data](https://github.com/CSSEGISandData/COVID-19) or NYC Health open data released on the [NYC Coronavirus Disease 2019 Data](https://github.com/nychealth/coronavirus-data) website. See [Project 2 Description](doc/project2_desc.md) for more details.  
-
-The **learning goals** for this project is:
-
-- business intelligence for data science
-- study legacy codes and further development
-- data cleaning
-- data visualization
-- systems development/design life cycle
-- shiny app/shiny server
-
-*The above general statement about project 2 can be removed once you are finished with your project. It is optional.
-
-## Project Title Lorem ipsum dolor sit amet
+## NYC COVID-19 and Dining 
 Term: Fall 2020
 
-+ Team #
-+ **Projec title**: + Team members
-	+ team member 1
-	+ team member 2
-	+ team member 3
-	+ team member 4
-	+ team member 5
++ Team #9
++ **Team Members**: 
+	+ Yiqi Lei
+	+ Siran Qiu
+	+ Shuyuan Wang
+	+ Natalie Williams
+	
++ Shiny Link: https://yiqilei.shinyapps.io/NYC-COVID-DINING/
 
-+ **Project summary**: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
++ **Project summary**: 
 
-+ **Contribution statement**: ([default](doc/a_note_on_contributions.md)) All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contributions statement. 
+When America’s first COVID-19 case was confirmed on March 1st in New York City, millions of New Yorkers' lives changed. Restaurants were ordered to close their doors in March and slowly, restaurants reopened over the course of summer 2020. On June 8th, NYC entered Phase 1 of the Reopening Plan and restaurants were able to sell food for takeout or delivery only. On June 22nd, NYC entered Phase 2 and restaurants were allowed to provide outdoor dining. Indoor dining became allowed on September 30th.
+
+We have designed this interactive Shiny App to help New Yorkers make a safer decision about where to go out to eat. Users can find up-to-date information about COVID Cases and restaurants in a given neighborhood in New York City. In the **Map** page, you can use the map to look for restaurants in neighborhoods near you, search by Zip-Code to find facts about the recent 4-week case rate and positive test rate, and sort the table by variables. In the **Results** page, you can view the results of our data analysis and facts about opened restaurants. In the **Suggestions** page, you can view dining suggestions and guiding principles. Use our maps and graphs about COVID-19 in New York City to plan your safest dining experience!
+
+Information is updated daily as data is published by NYC Open Health, and restaurant data originated from NYC Open Restaurants are publically available for applications.
+
+
++ **Contribution statement**: 
+
+All team members contributed equally in all stages of this project. All team members approve our work presented in this GitHub repository including this contribution statement.
+
+Yiqi Lei: Designed and built the Shiny App structure and user interface, and debugged deployment errors, and updated README file.
+
+Siran Qiu: Created the open restaurant and new case animations.
+
+Shuyuan Wang: Generated the Map page, interactive dashboards and two plots for analysis, and participated in some of the written part.
+
+Natalie Williams: Contributed to the written part, and produced the heatmaps of case and restaurant count by borough.
+
 
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 

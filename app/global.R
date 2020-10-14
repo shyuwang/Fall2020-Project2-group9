@@ -1,8 +1,9 @@
 #Check packages 
 packages.used <- as.list(
   c("shiny", "shinyWidgets","plotly", "htmltools","highcharter","DT","RCurl","htmlwidgets",
-    "ggmap","shinyjs","shinydashboard","dplyr","tibble","leaflet","sparkline","tidyverse","gganimate",
-    "ggplot2","xts","viridis","gifski"))
+    "ggmap","shinyjs","shinydashboard","dplyr","tibble","leaflet","sparkline","tidyverse","gganimate"))
+
+
 
 check.pkg<-function(x){
   if(!require(x,character.only=T))
@@ -31,18 +32,47 @@ library(tidyverse)
 library(htmlwidgets)
 library(gganimate)
 
-library(highcharter)
-library(DT)
-
-library(ggplot2)
-library(xts)
-library(viridis)
-library(gifski)
-
 #-----------------------------For main page Quick Update -----------------------
 update_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/summary.csv")
 quick_update <- read.csv(text = update_URL)
 #quick_update$NUMBER_OF_NYC_RESIDENTS <- as.character(quick_update$NUMBER_OF_NYC_RESIDENTS)
+
+#-------------------Get geographical data about neighborhoods and boros-------------------------------------------
+# get NYC Open Health list of corresponding zipcodes and MOZCTA
+zcta_to_modzctaURL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/Geography-resources/ZCTA-to-MODZCTA.csv")
+zcta_to_modzcta <- read.csv(text=zcta_to_modzctaURL)
+
+
+# Get Neighborhoods 
+data_by_modzctaURL <- getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/data-by-modzcta.csv')
+data_by_modzcta <- read.csv(text= data_by_modzctaURL)
+neighborhoods<- data_by_modzcta%>%
+  select(MODIFIED_ZCTA,NEIGHBORHOOD_NAME, BOROUGH_GROUP)
+
+bronxZip <-neighborhoods%>%
+  filter(BOROUGH_GROUP=="Bronx")
+
+manZip <-neighborhoods%>%
+  filter(BOROUGH_GROUP=="Manhattan")
+
+# Get geojson data from NYC Open Health file, convert zip coe
+#zipcodesBorders <- geojsonio::geojson_read("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/Geography-resources/MODZCTA_2010_WGS1984.geo.json", what = 'sp')
+#save(zipcodesBorders, file="./output/zipcodes.sp")
+load(file="./output/zipcodes.sp")
+
+#Only Manhattan zipcode borders
+manZcB <-zipcodesBorders[zipcodesBorders$MODZCTA %in% manZip$MODIFIED_ZCTA,]
+
+# Only Bronx Zipcode Borders
+bxZcB <-zipcodesBorders[zipcodesBorders$MODZCTA %in% bronxZip$MODIFIED_ZCTA,]
+
+# Get polygons of each boro- use NYC Open Data Geojson
+boroBorders <- geojsonio::geojson_read("./output/Borough Boundaries.geojson", what = 'sp')
+bronxBorder<- subset(boroBorders, boro_name=="Bronx")
+manBorder <- subset(boroBorders, boro_name=="Manhattan")
+save(boroBorders, file="./output/boros.sp")
+
+#--------------------------------------------------------------
 
 #---------------------------- For Map part --------------------------------------
 #--------------data for the TABLE on left side----------------
@@ -75,7 +105,7 @@ recent_use_dat <- recent_use_dat %>%
 
 #-------------data for the MAP --------------------------
 # data for restaurant Map
-load(file="output/res_dat.RData")
+load(file="./output/res_dat.RData")
 
 res_map <- res_dat %>%
   filter(!is.na(latitude) | !is.na(longitude)) %>%
@@ -148,7 +178,12 @@ by_boro_pop <- by_boro %>%
   mutate(population=CASE_COUNT*100000/CASE_RATE) %>%
   select(BOROUGH_GROUP, population) %>%
   filter(BOROUGH_GROUP!="Citywide")
-levels(by_boro_pop$BOROUGH_GROUP)[6]='Staten Island'
+levels(by_boro_pop$BOROUGH_GROUP)[1]='Bronx'
+levels(by_boro_pop$BOROUGH_GROUP)[2]='Brooklyn'
+levels(by_boro_pop$BOROUGH_GROUP)[3]='Manhattan'
+levels(by_boro_pop$BOROUGH_GROUP)[4]='Queens'
+levels(by_boro_pop$BOROUGH_GROUP)[5]='Staten Island'
+levels(by_boro_pop$BOROUGH_GROUP)[6]='Citywide'
 by_boro_pop$BOROUGH_GROUP <- as.character(by_boro_pop$BOROUGH_GROUP)
 
 # case rate (per 100000) by the beginning of phase 2, by borough
@@ -179,6 +214,83 @@ case_res_bar <- plot_ly() %>%
   xaxis = list(title=""),
   yaxis = list(title = "Case Rate (per 100,000)"))
 
+
+
+
+# ---------------- Number of cases by age group by boro of interest: Bx, Mn --------------
+
+# Updates daily
+age_boroURL <-getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/boro/boroughs-by-age.csv')
+all_boros_by_age <- read.csv(text=age_boroURL)
+boros_by_age <-all_boros_by_age%>%
+  select(group, BX_CASE_COUNT, BX_DEATH_RATE, BX_CASE_RATE, MN_CASE_COUNT, MN_CASE_RATE, MN_DEATH_RATE)
+
+# ---------------- Recent covid cases of boros of interest: Bx, Mn --------------
+
+# Updates daily
+recentBx <- recent_cases%>%
+  select(MODIFIED_ZCTA,COVID_CASE_COUNT_4WEEK)%>%
+  filter(MODIFIED_ZCTA %in% bronxZip$MODIFIED_ZCTA)
+
+recentMn <-recent_cases%>%
+  select(MODIFIED_ZCTA, COVID_CASE_COUNT_4WEEK)%>%
+  filter(MODIFIED_ZCTA %in% manZip$MODIFIED_ZCTA)
+
+# ---------------- Number of Restaurants in: Bx, Mn --------------
+
+dense_rest <- res_dat%>%
+  select(postcode)%>%
+  mutate(
+    modzcta = zcta_to_modzcta$MODZCTA[match(res_dat$postcode,zcta_to_modzcta$ZCTA)]
+  )
+# Some zip codes were not included in the NYC Covid because they represent such small
+# areas. Combining the small zip codes with their MODZCTA
+dense_rest$modzcta[dense_rest$postcode== 11249]<-11211
+dense_rest$modzcta[dense_rest$postcode== 10104]<-10018
+dense_rest$modzcta[dense_rest$postcode== 10281]<-10005
+dense_rest$modzcta[dense_rest$postcode== 10158]<-10017
+
+amount_res <-data.frame(table(dense_rest$modzcta))
+colnames(amount_res) <-c("modzcta","amount")
+
+amount_res_Mn <- amount_res%>%
+  filter(modzcta %in% manZip$MODIFIED_ZCTA)
+
+amount_res_Bx <-amount_res%>%
+  filter(modzcta %in% bronxZip$MODIFIED_ZCTA)
+
+#--------------------------------------------------------------
+
+# ---------------- Data on Covid Cases by poverty --------------
+by_pov_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/by-poverty.csv")
+by_pov <- read.csv(text = by_pov_URL)
+
+
+by_pov_df <- by_pov%>%
+  select(POVERTY_GROUP,CASE_RATE_ADJ, HOSPITALIZED_RATE_ADJ, DEATH_RATE_ADJ)
+by_pov_df
+
+case_by_pov_df <- data.frame(
+  pov_group =c("Low poverty","Low poverty","Low poverty",
+               "Medium poverty","Medium poverty","Medium poverty",
+               "High poverty","High poverty","High poverty",
+               "Very high poverty","Very high poverty","Very high poverty"),
+  rates =c("CASE_RATE_ADJ", "HOSPITALIZED_RATE_ADJ", "DEATH_RATE_ADJ",
+           "CASE_RATE_ADJ", "HOSPITALIZED_RATE_ADJ", "DEATH_RATE_ADJ",
+           "CASE_RATE_ADJ", "HOSPITALIZED_RATE_ADJ", "DEATH_RATE_ADJ",
+           "CASE_RATE_ADJ", "HOSPITALIZED_RATE_ADJ", "DEATH_RATE_ADJ"),
+  value=c(2158.10,369.71,125.66,
+          2617.16,577.14,194.72,
+          2850.29,742.60,243.61,
+          3238.73,847.82,272.96)
+)
+case_by_pov_df$pov_group <-factor(case_by_pov_df$pov_group, levels=unique(case_by_pov_df$pov_group))
+colnames(case_by_pov_df)
+
+rate_by_pov<-plot_ly(x=case_by_pov_df$pov_group, y = case_by_pov_df$value, color=case_by_pov_df$rates)%>%
+  add_lines()
+  
+
 #--------------------------------------------------------------
 # cumulative case rate across phases by borough & citywide
 boro_cases2 <- boro_ts_cases %>%
@@ -208,12 +320,12 @@ boro_cases2 <- boro_ts_cases %>%
     date >= '2020-09-30' ~ 'phase4-indoor',
   )) %>%
   group_by(borough, phase) %>%
-  summarise(case_count=sum(case_count))
+  summarise(case_count=sum(case_count),.groups = 'drop')
 
 by_boro_pop <- by_boro %>%
   mutate(population=CASE_COUNT*100000/CASE_RATE) %>%
   select(BOROUGH_GROUP, population)
-levels(by_boro_pop$BOROUGH_GROUP)[6]='Staten Island'
+
 by_boro_pop$BOROUGH_GROUP <- as.character(by_boro_pop$BOROUGH_GROUP)
 
 
@@ -261,5 +373,4 @@ boro_phase <- plot_ly(data=boro_phase_cases, x=~phase) %>%
                     tickvals = list('phase1','phase2','phase3','phase4-1','phase4-2','phase4-3',
                                     'phase4-4','phase4-5','phase4-indoor'),
                     tickmode = "array"), yaxis=list(title='Case Rate (per 100,000)'))
-
 
