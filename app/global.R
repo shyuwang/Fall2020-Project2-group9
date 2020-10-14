@@ -3,8 +3,6 @@ packages.used <- as.list(
   c("shiny", "shinyWidgets","plotly", "htmltools","highcharter","DT","RCurl","htmlwidgets",
     "ggmap","shinyjs","shinydashboard","dplyr","tibble","leaflet","sparkline","tidyverse","gganimate"))
 
-
-
 check.pkg<-function(x){
   if(!require(x,character.only=T))
     install.packages(x,character.only=T,dependence=T)}
@@ -12,6 +10,74 @@ check.pkg<-function(x){
 #check if packages needed are installed
 lapply(packages.used, check.pkg)
 
+if (!require("shiny")) {
+  install.packages("shiny")
+  library(shiny)
+}
+if (!require("shinyWidgets")) {
+  install.packages("shinyWidgets")
+  library(shinyWidgets)
+}
+if (!require("plotly")) {
+  install.packages("plotly")
+  library(plotly)
+}
+if (!require("htmltools")) {
+  install.packages("htmltools")
+  library(htmltools)
+}
+if (!require("highcharter")) {
+  install.packages("highcharter")
+  library(highcharter)
+}
+if (!require("DT")) {
+  install.packages("DT")
+  library(DT)
+}
+if (!require("RCurl")) {
+  install.packages("RCurl")
+  library(RCurl)
+}
+if (!require("htmlwidgets")) {
+  install.packages("htmlwidgets")
+  library(htmlwidgets)
+}
+if (!require("shinyjs")) {
+  install.packages("shinyjs")
+  library(shinyjs)
+}
+if (!require("shinydashboard")) {
+  install.packages("shinydashboard")
+  library(shinydashboard)
+}
+if (!require("ggmap")) {
+  install.packages("ggmap")
+  library(ggmap)
+}
+if (!require("dplyr")) {
+  install.packages("dplyr")
+  library(dplyr)
+}
+if (!require("tibble")) {
+  install.packages("tibble")
+  library(tibble)
+}
+if (!require("leaflet")) {
+  install.packages("leaflet")
+  library(leaflet)
+}
+if (!require("sparkline")) {
+  install.packages("sparkline")
+  library(sparkline)
+}
+if (!require("tidyverse")) {
+  install.packages("tidyverse")
+  library(tidyverse)
+}
+if (!require("gganimate")) {
+  install.packages("gganimate")
+  library(gganimate)
+}
 #load packages
 library(shiny)
 library(leaflet)
@@ -57,8 +123,8 @@ manZip <-neighborhoods%>%
 
 # Get geojson data from NYC Open Health file, convert zip coe
 #zipcodesBorders <- geojsonio::geojson_read("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/Geography-resources/MODZCTA_2010_WGS1984.geo.json", what = 'sp')
-#save(zipcodesBorders, file="./output/zipcodes.sp")
-load(file="./output/zipcodes.sp")
+#save(zipcodesBorders, file="output/zipcodes.sp")
+load(file="output/zipcodes.sp")
 
 #Only Manhattan zipcode borders
 manZcB <-zipcodesBorders[zipcodesBorders$MODZCTA %in% manZip$MODIFIED_ZCTA,]
@@ -70,7 +136,7 @@ bxZcB <-zipcodesBorders[zipcodesBorders$MODZCTA %in% bronxZip$MODIFIED_ZCTA,]
 boroBorders <- geojsonio::geojson_read("./output/Borough Boundaries.geojson", what = 'sp')
 bronxBorder<- subset(boroBorders, boro_name=="Bronx")
 manBorder <- subset(boroBorders, boro_name=="Manhattan")
-save(boroBorders, file="./output/boros.sp")
+save(boroBorders, file="output/boros.sp")
 
 #--------------------------------------------------------------
 
@@ -105,7 +171,7 @@ recent_use_dat <- recent_use_dat %>%
 
 #-------------data for the MAP --------------------------
 # data for restaurant Map
-load(file="./output/res_dat.RData")
+load(file="output/res_dat.RData")
 
 res_map <- res_dat %>%
   filter(!is.na(latitude) | !is.na(longitude)) %>%
