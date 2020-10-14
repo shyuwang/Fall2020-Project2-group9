@@ -184,10 +184,10 @@ case_res_bar <- plot_ly() %>%
 
 # Updates daily
 age_boroURL <-getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/boro/boroughs-by-age.csv')
-all_boros_by_age <- read.csv(text=url3)
+all_boros_by_age <- read.csv(text=age_boroURL)
 boros_by_age <-all_boros_by_age%>%
   select(group, BX_CASE_COUNT, BX_CASE_RATE, MN_CASE_COUNT, MN_CASE_RATE)
-  
+
 
 #--------------------------------------------------------------
 # cumulative case rate across phases by borough & citywide
@@ -272,7 +272,19 @@ boro_phase <- plot_ly(data=boro_phase_cases, x=~phase) %>%
                                     'phase4-4','phase4-5','phase4-indoor'),
                     tickmode = "array"), yaxis=list(title='Case Rate (per 100,000)'))
 
-
+#--------------------------------------------------------------
 # Get geojson data from NYC Open Health file, convert zip coe
-zipcodes <- geojsonio::geojson_read("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/Geography-resources/MODZCTA_2010_WGS1984.geo.json", what = 'sp')
-save(zipcodes, file="output/zipcodes.sp")
+zipcodesBorders <- geojsonio::geojson_read("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/Geography-resources/MODZCTA_2010_WGS1984.geo.json", what = 'sp')
+save(zipcodesBorders, file="output/zipcodes.sp")
+
+# Get polygons of each boro- use NYC Open Data Geojson
+boroBorders <- geojsonio::geojson_read("./data/Borough Boundaries.geojson", what = 'sp')
+
+save(boroBorders, file="output/boros.sp")
+
+# Get Neighborhoods 
+data_by_modzctaURL <- getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/data-by-modzcta.csv')
+data_by_modzcta <- read.csv(text= data_by_modzctaURL)
+neighborhoods<- data_by_modzcta%>%
+  select(MODIFIED_ZCTA,NEIGHBORHOOD_NAME, BOROUGH_GROUP)
+

@@ -198,7 +198,7 @@ shinyServer(function(input,output, session){
   },deleteFile=FALSE)
   
   
-  filtered_data_map <- reactive({
+  filtered_data_map_age <- reactive({
     if(is.null(input$group)){selected_age_group = levels(boros_by_age$group)}
     else{selected_age_group = input$group}
     boros_by_age %>%
@@ -212,7 +212,7 @@ shinyServer(function(input,output, session){
       domain = boros_by_age$BX_CASE_COUNT
     )
 
-    map <-zipcodes%>%
+    map <-boroBorders%>%
       leaflet(options = leafletOptions(minZoom = 10, maxZoom = 18))%>%
       setView(lng=-73.8648, lat=40.8448, zoom = 11)%>%
       addTiles()%>%
@@ -223,8 +223,7 @@ shinyServer(function(input,output, session){
         highlight = highlightOptions( weight = 5,color = "#666",fillOpacity = 0.7,
           bringToFront = TRUE),
         label= paste0(
-          "Zip Code: ",recent_4_week$NEIGHBORHOOD_NAME, "<br/>",
-          "Case Rate of Age Range in Neighborhood: ",boros_by_age$BX_CASE_COUNT,
+          "Case Rate of Age Range in Boro: ",boros_by_age$BX_CASE_COUNT,
           "<br/>","Age Range ",boros_by_age$group
         ))%>%
       lapply(htmltools::HTML)
@@ -236,6 +235,21 @@ shinyServer(function(input,output, session){
                 position ='topleft')
   })
   
+  observe({
+    temp_df_age = filtered_data_map_age()
+    leafletProxy('case_age_Bx',data = temp_df_age) %>%
+      fitBounds(~min(longitude), ~min(latitude), ~max(longitude), ~max(latitude)) %>%
+      addPolygons(
+        fillColor = ~pal(temp_df_age$BX_CASE_COUNT),
+        weight =2, opacity = 1,color = 'white',fillOpacity = 0.7,
+        highlight = highlightOptions( weight = 5,color = "#666",fillOpacity = 0.7,
+                                      bringToFront = TRUE),
+        label= paste0(
+          "Case Rate of Age Range in Neighborhood: ",temp_df_age$BX_CASE_COUNT,
+          "<br/>","Age Range ",temp_df_age$group
+        ))%>%
+      lapply(htmltools::HTML) 
+  })
   
 })
 }
