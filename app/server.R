@@ -1,11 +1,7 @@
 source("global.R") 
 
-if (interactive()){
-shinyServer(function(input,output, session){
-  
-  #page<-read_html("https://github.com/nychealth/coronavirus-data/blob/master/summary.csv")
-  #num<-page%>%
-  #  html_nodes("td")%>%html_text()
+#if (interactive()){
+shinyServer(function(input,output){
   
   output$time<-renderText({
     paste0("Last Updated: ",as.character(quick_update$NUMBER_OF_NYC_RESIDENTS[quick_update["MEASURE"]=="DATE_UPDATED"])) #"time"
@@ -37,7 +33,7 @@ shinyServer(function(input,output, session){
   })
   
   # ------ Table in Map part ----------------
-  staticRender_cb <- JS('function(){debugger;HTMLWidgets.staticRender();}') 
+  staticRender_cb <- htmlwidgets::JS('function(){debugger;HTMLWidgets.staticRender();}') 
   output$recentTable <- renderDataTable(recent_use_dat,
                                         escape = FALSE,
                                         options = list(drawCallback = staticRender_cb))
@@ -188,12 +184,12 @@ shinyServer(function(input,output, session){
     })
   
   output$resAnimation <- renderImage({
-    list(src = "./output/rest_boro_ani.gif",
+    list(src = "output/rest_boro_ani.gif",
          contentType = 'image/gif')
   },deleteFile=FALSE)
   
   output$caseAnimation <- renderImage({
-    list(src = "./output/case_boro_ani.gif",
+    list(src = "output/case_boro_ani.gif",
          contentType = 'image/gif')
   },deleteFile=FALSE)
   
@@ -424,4 +420,4 @@ shinyServer(function(input,output, session){
   })
   
 })
-}
+#}
