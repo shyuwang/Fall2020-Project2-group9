@@ -1,94 +1,118 @@
 #Check packages 
-packages.used <- as.list(
-  c("shiny", "shinyWidgets","plotly", "htmltools","highcharter","DT","RCurl","htmlwidgets",
-    "ggmap","shinyjs","shinydashboard","dplyr","tibble","leaflet","sparkline","tidyverse","gganimate"))
+# packages.used <- as.list(
+#   c("shiny", "shinyWidgets","plotly", "htmltools","highcharter","DT","RCurl","htmlwidgets",
+#     "ggmap","shinyjs","shinydashboard","dplyr","tibble","leaflet","sparkline","tidyverse","gganimate"))
+# 
+# check.pkg<-function(x){
+#   if(!require(x,character.only=T))
+#     install.packages(x,character.only=T,dependence=T)}
+# 
+# #check if packages needed are installed
+# lapply(packages.used, check.pkg)
 
-check.pkg<-function(x){
-  if(!require(x,character.only=T))
-    install.packages(x,character.only=T,dependence=T)}
-
-#check if packages needed are installed
-lapply(packages.used, check.pkg)
-
+if (!require("devtools")) {
+  install.packages("devtools",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(devtools)
+}
 if (!require("shiny")) {
-  install.packages("shiny")
+  install.packages("shiny",dependence=T, repos = 'http://cran.rstudio.com/')
   library(shiny)
 }
+if (!require("sp")) {
+  install.packages("sp",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(sp)
+}
 if (!require("shinyWidgets")) {
-  install.packages("shinyWidgets")
+  install.packages("shinyWidgets",dependence=T, repos = 'http://cran.rstudio.com/')
   library(shinyWidgets)
 }
 if (!require("plotly")) {
-  install.packages("plotly")
+  install.packages("plotly",dependence=T, repos = 'http://cran.rstudio.com/')
   library(plotly)
 }
+if (!require("ggplot2")) {
+  install.packages("ggplot2",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(ggplot2)
+}
 if (!require("htmltools")) {
-  install.packages("htmltools")
+  install.packages("htmltools",dependence=T, repos = 'http://cran.rstudio.com/')
   library(htmltools)
 }
 if (!require("highcharter")) {
-  install.packages("highcharter")
+  install.packages("highcharter",dependence=T, repos = 'http://cran.rstudio.com/')
   library(highcharter)
 }
 if (!require("DT")) {
-  install.packages("DT")
+  install.packages("DT",dependence=T, repos = 'http://cran.rstudio.com/')
   library(DT)
 }
 if (!require("RCurl")) {
-  install.packages("RCurl")
+  install.packages("RCurl",dependence=T, repos = 'http://cran.rstudio.com/')
   library(RCurl)
 }
 if (!require("htmlwidgets")) {
-  install.packages("htmlwidgets")
+  install.packages("htmlwidgets",dependence=T, repos = 'http://cran.rstudio.com/')
   library(htmlwidgets)
 }
+if (!require("shinythemes")) {
+  install.packages("shinythemes",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(shinythemes)
+}
 if (!require("shinyjs")) {
-  install.packages("shinyjs")
+  install.packages("shinyjs",dependence=T, repos = 'http://cran.rstudio.com/')
   library(shinyjs)
 }
 if (!require("shinydashboard")) {
-  install.packages("shinydashboard")
+  install.packages("shinydashboard",dependence=T, repos = 'http://cran.rstudio.com/')
   library(shinydashboard)
 }
 if (!require("ggmap")) {
-  install.packages("ggmap")
+  install.packages("ggmap",dependence=T, repos = 'http://cran.rstudio.com/')
   library(ggmap)
 }
 if (!require("dplyr")) {
-  install.packages("dplyr")
+  install.packages("dplyr",dependence=T, repos = 'http://cran.rstudio.com/')
   library(dplyr)
 }
 if (!require("tibble")) {
-  install.packages("tibble")
+  install.packages("tibble",dependence=T, repos = 'http://cran.rstudio.com/')
   library(tibble)
 }
 if (!require("leaflet")) {
-  install.packages("leaflet")
+  install.packages("leaflet",dependence=T, repos = 'http://cran.rstudio.com/')
   library(leaflet)
 }
 if (!require("sparkline")) {
-  install.packages("sparkline")
+  install.packages("sparkline",dependence=T, repos = 'http://cran.rstudio.com/')
   library(sparkline)
 }
 if (!require("tidyverse")) {
-  install.packages("tidyverse")
+  install.packages("tidyverse",dependence=T, repos = 'http://cran.rstudio.com/')
   library(tidyverse)
 }
 if (!require("gganimate")) {
-  install.packages("gganimate")
+  install.packages("gganimate",dependence=T, repos = 'http://cran.rstudio.com/')
   library(gganimate)
+}
+if (!require("data.table")) {
+  install.packages("data.table",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(data.table)
+}
+if (!require("dashboardthemes")) {
+  install.packages("dashboardthemes",dependence=T, repos = 'http://cran.rstudio.com/')
+  library(dashboardthemes)
 }
 #load packages
 library(shiny)
 library(leaflet)
 library(data.table)
 library(plotly)
-#library(shinythemes)
+library(shinythemes)
 library(shinyWidgets)
 #library(googleVis)
 library(ggmap)
 library(shinyjs)
-#library(dashboardthemes)
+library(dashboardthemes)
 library(shinydashboard)
 library(sparkline)
 library(dplyr)
@@ -99,19 +123,21 @@ library(htmlwidgets)
 library(gganimate)
 
 #-----------------------------For main page Quick Update -----------------------
-update_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/summary.csv")
-quick_update <- read.csv(text = update_URL)
+# update_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/summary.csv")
+# quick_update <- read.csv(text = update_URL)
+load(file="output/quick_update.RData")
 #quick_update$NUMBER_OF_NYC_RESIDENTS <- as.character(quick_update$NUMBER_OF_NYC_RESIDENTS)
 
 #-------------------Get geographical data about neighborhoods and boros-------------------------------------------
 # get NYC Open Health list of corresponding zipcodes and MOZCTA
-zcta_to_modzctaURL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/Geography-resources/ZCTA-to-MODZCTA.csv")
-zcta_to_modzcta <- read.csv(text=zcta_to_modzctaURL)
-
+# zcta_to_modzctaURL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/Geography-resources/ZCTA-to-MODZCTA.csv")
+# zcta_to_modzcta <- read.csv(text=zcta_to_modzctaURL)
+load(file="output/zcta_to_modzcta.RData")
 
 # Get Neighborhoods 
-data_by_modzctaURL <- getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/data-by-modzcta.csv')
-data_by_modzcta <- read.csv(text= data_by_modzctaURL)
+# data_by_modzctaURL <- getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/data-by-modzcta.csv')
+# data_by_modzcta <- read.csv(text= data_by_modzctaURL)
+load(file="output/data_by_modzcta.RData")
 neighborhoods<- data_by_modzcta%>%
   select(MODIFIED_ZCTA,NEIGHBORHOOD_NAME, BOROUGH_GROUP)
 
@@ -133,7 +159,7 @@ manZcB <-zipcodesBorders[zipcodesBorders$MODZCTA %in% manZip$MODIFIED_ZCTA,]
 bxZcB <-zipcodesBorders[zipcodesBorders$MODZCTA %in% bronxZip$MODIFIED_ZCTA,]
 
 # Get polygons of each boro- use NYC Open Data Geojson
-boroBorders <- geojsonio::geojson_read("./output/Borough Boundaries.geojson", what = 'sp')
+boroBorders <- geojsonio::geojson_read("output/Borough Boundaries.geojson", what = 'sp')
 bronxBorder<- subset(boroBorders, boro_name=="Bronx")
 manBorder <- subset(boroBorders, boro_name=="Manhattan")
 save(boroBorders, file="output/boros.sp")
@@ -144,8 +170,9 @@ save(boroBorders, file="output/boros.sp")
 #--------------data for the TABLE on left side----------------
 # get the daily NYC recent-4-week-by-modzcta.csv data from API
 # recent case Table
-recent_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/recent/recent-4-week-by-modzcta.csv")
-recent_cases <- read.csv(text = recent_URL)
+# recent_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/recent/recent-4-week-by-modzcta.csv")
+# recent_cases <- read.csv(text = recent_URL)
+load(file="output/recent_cases.RData")
 
 recent_use_dat <- recent_cases %>%
   select("MODIFIED_ZCTA","NEIGHBORHOOD_NAME","COVID_CASE_RATE_WEEK4",
@@ -194,8 +221,9 @@ res_dat_distinct <- res_dat %>%
 
 
 # ---------------- number of cases by boro & # of restaurants by boro --------------
-boro_ts_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/boro/boroughs-case-hosp-death.csv")
-boro_ts_cases <- read.csv(text = boro_ts_URL)
+# boro_ts_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/boro/boroughs-case-hosp-death.csv")
+# boro_ts_cases <- read.csv(text = boro_ts_URL)
+load(file="output/boro_ts_cases.RData")
 
 # number of cases by the beginning of outdoor dining, by borough
 boro_cases1 <- boro_ts_cases %>%
@@ -237,8 +265,9 @@ res_boro_prop <- res_boro_ts %>%
 res_boro_prop$borough <- as.character(res_boro_ts$borough)
 
 # number of residency by borough (calculated by `by-boro.csv`)
-by_boro_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/by-boro.csv")
-by_boro <- read.csv(text = by_boro_URL)
+# by_boro_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/by-boro.csv")
+# by_boro <- read.csv(text = by_boro_URL)
+load(file="output/by_boro.RData")
 
 by_boro_pop <- by_boro %>%
   mutate(population=CASE_COUNT*100000/CASE_RATE) %>%
@@ -286,8 +315,9 @@ case_res_bar <- plot_ly() %>%
 # ---------------- Number of cases by age group by boro of interest: Bx, Mn --------------
 
 # Updates daily
-age_boroURL <-getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/boro/boroughs-by-age.csv')
-all_boros_by_age <- read.csv(text=age_boroURL)
+# age_boroURL <-getURL('https://raw.githubusercontent.com/nychealth/coronavirus-data/master/boro/boroughs-by-age.csv')
+# all_boros_by_age <- read.csv(text=age_boroURL)
+load(file="output/all_boros_by_age.RData")
 boros_by_age <-all_boros_by_age%>%
   select(group, BX_CASE_COUNT, BX_DEATH_RATE, BX_CASE_RATE, MN_CASE_COUNT, MN_CASE_RATE, MN_DEATH_RATE)
 
@@ -328,9 +358,9 @@ amount_res_Bx <-amount_res%>%
 #--------------------------------------------------------------
 
 # ---------------- Data on Covid Cases by poverty --------------
-by_pov_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/by-poverty.csv")
-by_pov <- read.csv(text = by_pov_URL)
-
+# by_pov_URL <- getURL("https://raw.githubusercontent.com/nychealth/coronavirus-data/master/by-poverty.csv")
+# by_pov <- read.csv(text = by_pov_URL)
+load(file="output/by_pov.RData")
 
 by_pov_df <- by_pov%>%
   select(POVERTY_GROUP,CASE_RATE_ADJ, HOSPITALIZED_RATE_ADJ, DEATH_RATE_ADJ)

@@ -47,7 +47,7 @@ ui <- dashboardPage(skin="blue",
                                                       "As New York slowly reopens, politicians and public health experts continue to track the rate of COVID-19 spread. We have designed this interactive webpage so New Yorkers can have more information about the areas where they are dining. Information is updated daily as data is published by NYC Open Health, and restaurant data originated from NYC Open Restaurants publically available permit applications.",
                                                       br(), br(),
                                                       tags$li("Interest 1: Through this Shiny app, users can have daily updates about COVID in New York City, and up-to-date information about open restaurants."),
-                                                      tags$li("Interest 2: 2.	The interactive map is meant to help New Yorkers make a safer decision about where to go out to eat.")
+                                                      tags$li("Interest 2: The interactive map is meant to help New Yorkers make a safer decision about where to go out to eat.")
                                     )),
                                     br(),
                                     style = "background-image: url('../bg1.jpg');

@@ -1,0 +1,13 @@
+name: eat-out-nyc-covid
+title: eat-out-nyc-covid
+username:
+account: sw3449
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3223859
+bundleId: 3855083
+url: https://sw3449.shinyapps.io/eat-out-nyc-covid/
+when: 1605241703.50515
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|animations.R|modified_rest_boro.R|README.md|www/.DS_Store
