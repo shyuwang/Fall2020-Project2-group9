@@ -20,6 +20,8 @@ Term: Fall 2020
 	
 + Shiny Link: https://sw3449.shinyapps.io/covid-nyc-dining/
 
++ Update on 11/13/2020: Since [nychealth](https://github.com/nychealth/coronavirus-data) made significant changes to the COVID data repo, including some key files, filenames, and locations, urls for data used in this Shiny APP were no longer valid. Thus this Shiny APP cannot be updated daily and it is modified to the version that reporting COVID data till October 3, 2020.
+
 + **Project summary**: 
 
 When America’s first COVID-19 case was confirmed on March 1st in New York City, millions of New Yorkers' lives changed. Restaurants were ordered to close their doors in March and slowly, restaurants reopened over the course of summer 2020. On June 8th, NYC entered Phase 1 of the Reopening Plan and restaurants were able to sell food for takeout or delivery only. On June 22nd, NYC entered Phase 2 and restaurants were allowed to provide outdoor dining. Indoor dining became allowed on September 30th.
