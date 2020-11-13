@@ -1,0 +1,13 @@
+name: nyc-covid-dining
+title: nyc-covid-dining
+username:
+account: sw3449
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3016501
+bundleId: 3855115
+url: https://sw3449.shinyapps.io/NYC-COVID-DINING/
+when: 1605242625.87909
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: animations.R|modified_rest_boro.R|README.md|www/.DS_Store
